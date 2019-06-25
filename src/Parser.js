@@ -1,6 +1,7 @@
+// TODO: this currently assumes that the fields name are all unique, should check that later
 export function parse_fml_emdis(raw_string){
     var splitBySpaces =  raw_string.split(/(\s+)/).filter( e => e.trim().length > 0);
-    if(splitBySpaces < 4){
+    if(splitBySpaces.length < 4){
         return {};
     }
     // e.g. DONOR_CB
@@ -35,14 +36,24 @@ export function parse_fml_emdis(raw_string){
         idx++;
     }
 
-    console.log(fields);
-    console.log(values);
     var result = {};
     for (var i = 0; i< fields.length; i++){
         result[fields[i]] = values[i];
     }
-    console.log(result);
     return result;
+}
+
+export function compareEmdis(left, right){
+    var reducer = (accu, k) => {
+        if(left[k] !== right[k]){
+            accu[k] = `left: ${left[k]}, right: ${right[k]}`;
+        }
+        return accu;
+    };
+    var fieldsDiff = Object.keys(left).reduce(reducer, {});
+
+    fieldsDiff = Object.keys(right).reduce(reducer, fieldsDiff);
+    return fieldsDiff;
 }
 
 export function displayDiff(emdisDiff){

@@ -1,14 +1,14 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {parse_fml_emdis, displayDiff} from './Parser.js';
+import {parse_fml_emdis, displayDiff, compareEmdis} from './Parser.js';
 
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             val1: "a b c d \"E\"",
-            val2: "",
+            val2: "a b c d \"F\" ",
             difference: "hello"
         };
     }
@@ -22,7 +22,10 @@ class App extends React.Component {
     }
 
     updateDifference(){
-        this.setState({difference: displayDiff(parse_fml_emdis(this.state.val1)) });
+        var emdis1 = parse_fml_emdis(this.state.val1);
+        var emdis2 = parse_fml_emdis(this.state.val2);
+        var diff = compareEmdis(emdis1, emdis2);
+        this.setState({difference: displayDiff(diff)});
     }
 
     render() {
