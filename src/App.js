@@ -2,14 +2,15 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import {parse_fml_emdis, displayDiff, compareEmdis} from './Parser.js';
+import Textarea from 'react-textarea-autosize';
 
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            val1: "a b c d \"E\"",
-            val2: "a b c d \"F\" ",
-            difference: "hello"
+            val1: "DONOR_CB /FIELD\n P_ID, D_ID, D_A1: \"123jklds\", \"gjklsda321\", \"02:01\" ",
+            val2: "DONOR_CB /FIELD P_ID\n, D_ID : \"3jklds\", \"gjklsda321\";",
+            difference: ""
         };
     }
 
@@ -31,8 +32,8 @@ class App extends React.Component {
     render() {
         return (
                 <div>
-                <input type = "text" name = "fml message" value = {this.state.val1} onChange = {this.handleInputOneChange.bind(this)}/>
-                <input type = "text" name = "fml message 2" value = {this.state.val2} onChange = {this.handleInputTwoChange.bind(this)}/>
+                <Textarea type = "text" name = "fml message" value = {this.state.val1} onChange = {this.handleInputOneChange.bind(this)}/>
+                <Textarea type = "text" name = "fml message 2" value = {this.state.val2} onChange = {this.handleInputTwoChange.bind(this)}/>
                 <button onClick = {this.updateDifference.bind(this)} >
                 compare
             </button>

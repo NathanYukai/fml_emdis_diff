@@ -1,40 +1,30 @@
 // TODO: this currently assumes that the fields name are all unique, should check that later
 export function parse_fml_emdis(raw_string){
-    var splitBySpaces =  raw_string.split(/(\s+)/).filter( e => e.trim().length > 0);
-    if(splitBySpaces.length < 4){
+    var firstColumnIdx = raw_string.indexOf(':');
+    if(firstColumnIdx<0){
+        console.log("invalid fml: no column separation");
         return {};
     }
+    var fields_raw = raw_string.substring(0, firstColumnIdx);
+    var values_raw = raw_string.substring(firstColumnIdx+1);
+
+    //separated by (comma and/or space)+
+    var beforeColumn = fields_raw.split(/(?:,|\s)+/).filter(e => e.trim().length > 0);
+
+    if(beforeColumn.length < 3){
+        console.log("too short");
+        return {};
+    }
+
     // e.g. DONOR_CB
-    var message_type = splitBySpaces[0];
+    var message_type = beforeColumn[0];
     // /FIELD
-    var field_declare = splitBySpaces[1];
+    var field_declare = beforeColumn[1];
 
-    var fields = [];
-    var values = [];
-    var idx = 2;
-    while(true){
-        var current = splitBySpaces[idx];
-        if(current[0] === '"'){
-            break;
-        }
-        fields.push(current);
-        idx ++;
-        if(idx >= splitBySpaces.length){
-            console.log("invalid fml");
-            return {};
-        }
-    }
-
-    while(idx < splitBySpaces.length){
-        var current = splitBySpaces[idx];
-        if(current[0] !== '"'
-           || current[current.length-1] !== '"'){
-            console.log("invalid fml");
-            return {};
-        }
-        values.push(current);
-        idx++;
-    }
+    var fields = beforeColumn.slice(2);
+    var values = values_raw.split(/(?:,|\s|"|;)+/).filter(e => e.trim().length>0);
+    // console.log(fields);
+    // console.log(values);
 
     var result = {};
     for (var i = 0; i< fields.length; i++){
@@ -43,10 +33,11 @@ export function parse_fml_emdis(raw_string){
     return result;
 }
 
+// return [{left:string, right: string}]
 export function compareEmdis(left, right){
     var reducer = (accu, k) => {
         if(left[k] !== right[k]){
-            accu[k] = `left: ${left[k]}, right: ${right[k]}`;
+            accu[k] = {left: left[k], right: right[k]};
         }
         return accu;
     };
@@ -56,8 +47,13 @@ export function compareEmdis(left, right){
     return fieldsDiff;
 }
 
+// accept : [{left:string, right: string}]
 export function displayDiff(emdisDiff){
-    var result = Object.keys(emdisDiff).reduce((accu, k) => accu += (`${k}: ${emdisDiff[k]} \n`), "");
+    var _showDiff = (key, diff) => {
+        var msg = `left: ${diff[key].left}`.padEnd(25, ' ').concat(` \t right: ${diff[key].right} \n`);
+        return (`${key}:`.padEnd(10).concat(msg));
+    };
+    var result = Object.keys(emdisDiff).reduce((accu, k) => accu += _showDiff(k, emdisDiff), "");
     return result;
 }
 
