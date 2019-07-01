@@ -2,8 +2,8 @@
 export function parse_fml_emdis(raw_string) {
     var firstColumnIdx = raw_string.indexOf(':');
     if (firstColumnIdx < 0) {
-        window.alert("invalid fml: can't find column that separate fields and values");
-        return {};
+        console.warn("invalid fml: can't find column that separate fields and values");
+        return [];
     }
     var fields_raw = raw_string.substring(0, firstColumnIdx);
     var values_raw = raw_string.substring(firstColumnIdx + 1);
@@ -12,8 +12,8 @@ export function parse_fml_emdis(raw_string) {
     var beforeColumn = fields_raw.split(/(?:,|\s)+/).filter(emptyStringFilter);
 
     if (beforeColumn.length < 3) {
-        window.alert("too short");
-        return {};
+        console.warn("too short");
+        return [];
     }
 
     // e.g. DONOR_CB
