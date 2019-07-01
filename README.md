@@ -1,3 +1,5 @@
+This is currently hosted at https://fml-emdis-diff.herokuapp.com/, feel free to host it by yourself
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
