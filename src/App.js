@@ -7,8 +7,8 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            input1: "DONOR_CB /FIELD\n P_ID, D_ID, D_A1: \"123jklds\", \"gjklsda321\", \"02:01\" ",
-            input2: "DONOR_CB /FIELD P_ID\n, D_ID : \"3jklds\", \"gjklsda321\";",
+            input1: "",
+            input2: "",
             difference: ""
         };
     }
