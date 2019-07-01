@@ -7,18 +7,18 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            input1: "",
-            input2: "",
+            input1: "\n\n\n\n\n",
+            input2: "\n\n\n\n\n",
             difference: ""
         };
     }
 
     handleInputOneChange(event) {
-        this.setState({ input1: event.target.value });
+        this.setState({ input1: event.target.value.trim() });
     }
 
     handleInputTwoChange(event) {
-        this.setState({ input2: event.target.value });
+        this.setState({ input2: event.target.value.trim() });
     }
 
     updateDifference() {
@@ -31,8 +31,10 @@ class App extends React.Component {
     render() {
         return (
             <div>
-                <Textarea className="emdisInput" type="text" name="fml message" value={this.state.input1} onChange={this.handleInputOneChange.bind(this)} />
-                <Textarea className="emdisInput" type="text" name="fml message 2" value={this.state.input2} onChange={this.handleInputTwoChange.bind(this)} />
+                <Textarea className="emdisInput" type="text" name="fml message"
+                    value={this.state.input1} onChange={this.handleInputOneChange.bind(this)} />
+                <Textarea className="emdisInput" type="text" name="fml message 2"
+                    value={this.state.input2} onChange={this.handleInputTwoChange.bind(this)} />
                 <button onClick={this.updateDifference.bind(this)} >
                     compare
             </button>
