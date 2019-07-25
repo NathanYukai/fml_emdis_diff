@@ -6,7 +6,7 @@ export function parse_fml_emdis(raw_string) {
         return [];
     }
     var fields_raw = raw_string.substring(0, firstColumnIdx);
-    var values_raw = raw_string.substring(firstColumnIdx + 1);
+    var values_raw = raw_string.substring(firstColumnIdx + 1).trim();
 
     //separated by (comma and/or space)+
     var beforeColumn = fields_raw.split(/(?:,|\s)+/).filter(emptyStringFilter);
@@ -19,10 +19,13 @@ export function parse_fml_emdis(raw_string) {
     // e.g. DONOR_CB
     var message_type = beforeColumn[0];
     // /FIELD
+    // eslint-disable-next-line no-unused-vars
     var field_declare = beforeColumn[1];
     var fields = beforeColumn.slice(2);
 
+    //split into groups because there might be more than one
     var values_group = values_raw.split(/(?:;)/).filter(emptyStringFilter);
+
     var emdis_messages = [];
     values_group.forEach(element => {
         var emdis = get_emdis_message(fields, element);
@@ -57,7 +60,7 @@ export function displayListOfDiffs(listDiffs) {
 //values_raw: "raw string"
 //return : {field_1:value1, etc}
 function get_emdis_message(fields, values_raw) {
-    var values = values_raw.split(/(?:,|\s|")+/).filter(emptyStringFilter);
+    var values = values_raw.split(/(?:,|\s)+/).filter(emptyStringFilter);
     if (values.length > fields.length) {
         console.warn(`too many values: fields: ${fields}, values: ${values}`);
     }
